@@ -296,6 +296,10 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="userfiles\files\" />
+    <Folder Include="userfiles\flash\" />
+    <Folder Include="userfiles\images\" />
+    <Folder Include="userfiles\media\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="FileBrowser\IZWebFileManagerThumbnailHandler.ashx" />
