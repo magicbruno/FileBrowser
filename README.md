@@ -66,7 +66,7 @@ MB FileBrowser doesn't use IZWebFileManager upload engine, but its own based on 
 
 To deny upload you mast set FileBrowserAccesMode session property (see below) to *ReadOnly* or to *DenyAll*.
 
-For default only jpg,jpeg,doc,docx,zip,gif,png,pdf,rar,svg,svgz,xls,xlsx,ppt,pps,pptx files are accepted. This setting is suitable for most application, anyway you can costomize allowed file types list setting the AllowedFileTypes session property.
+For default only **jpg,jpeg,doc,docx,zip,gif,png,pdf,rar,svg,svgz,xls,xlsx,ppt,pps,pptx** files are accepted. This setting is suitable for most application, anyway you can costomize allowed file types list setting the **AllowedFileTypes** session property.
 
 ## Granting access ##
 It is highly recommended to grant access to the server folders only to registered users. Probably you will:
@@ -75,6 +75,8 @@ It is highly recommended to grant access to the server folders only to registere
 2. Define granted access during  the process of authenticating users.
 
 Default Acces mode is defined by the IZWebFileManager property **DefaultAccessMode**.
+
+When user log in you can grant him proper access setting **FileBrowserAccessMode** session property.
 
 MB FileBrowser offer a typed interface to application session. Through class MagicSession defined in MB.FileBrowser you che handle session properties related to MB_FileBrowser. 
 
@@ -85,4 +87,4 @@ MB FileBrowser offer a typed interface to application session. Through class Mag
 - **Write**: user can copy and upload  but not overwrite, move or delete files.
 - **Delete**: user has full control over files.
 
-**MB.FileBrowser.MagicSession.Current.AllowedFileTypes** define file tipes accepted by upload process. Value is a comma separated list of extension without leading dot.
+**MB.FileBrowser.MagicSession.Current.AllowedFileTypes** define file tipes accepted by upload process. Valid value is a string formatted as a comma separated list of extension without leading dot.
