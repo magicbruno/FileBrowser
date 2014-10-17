@@ -1,5 +1,4 @@
 # MB FileBrowser #
-----------
 
 MB FileBrowser for ASP.NET 3.5 offer an open source solution to provide server side file browsing to popular html on-line editors (like CKEditor and Tiny MCE) or to your own forms.
 
@@ -15,7 +14,7 @@ PM> Install-Package MB.FileBrowser
 
 This will install last version of the package in your project. 
 
-Next step is to create the root folder for you browser. For default root folder path is **/userfiles**. If you may change it setting MainDirectoriy attribute of FileManager1 in FileBrowser.aspx.
+Next step is to create the root folder for you browser. For default root folder path is **/userfiles**. You may change it setting MainDirectoriy attribute of FileManager1 in FileBrowser.aspx.
 
 **!!! IMPORTANT !!!** Internet anomynous user (IUSR_**) MUST have full control over this folder.
 
