@@ -72,8 +72,10 @@ For default only jpg,jpeg,doc,docx,zip,gif,png,pdf,rar,svg,svgz,xls,xlsx,ppt,pps
 ## Granting access ##
 It is highly recommended to grant access to the server folders only to registered users. Probably you will:
 
-1. Define granted access during  the process of authenticating users.
-2. Define default access for  guest users (or when session expires).
+1. Define default access for  guest users (or when session expires).
+2. Define granted access during  the process of authenticating users.
+
+Default Acces mode is defined by the IZWebFileManager property **DefaultAccessMode**.
 
 MB FileBrowser offer a typed interface to application session. Through class MagicSession defined in MB.FileBrowser you che handle session properties related to MB_FileBrowser. 
 
@@ -84,4 +86,4 @@ MB FileBrowser offer a typed interface to application session. Through class Mag
 - **Write**: user can copy and upload  but not overwrite, move or delete files.
 - **Delete**: user has full control over files.
 
-**MB.FileBrowser.MagicSession.Current.AllowedFileTypes** define file tipes accepte by upload process. Value is a comma separated list of extension without leading dot.
+**MB.FileBrowser.MagicSession.Current.AllowedFileTypes** define file tipes accepted by upload process. Value is a comma separated list of extension without leading dot.
