@@ -33,6 +33,7 @@
         <asp:HiddenField ID="HF_Opener" runat="server" />
         <asp:HiddenField ID="HF_CallBack" runat="server" />
         <asp:HiddenField ID="HF_Field" runat="server" />
+        <input id="HF_FileBrowserConfig" type="hidden" runat="server" data-imagefolder="images" data-flashfolder="flash" data-filesfolder="files" data-mediafolder="media"  />
         <div>
             <iz:FileManager ID="FileManager1" runat="server" Height="480" Width="570" ImagesFolder="~/FileBrowser/img/cmd"
                 MainDirectory="~/userfiles"  CustomThumbnailHandler="~/FileBrowser/IZWebFileManagerThumbnailHandler.ashx"

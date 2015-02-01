@@ -88,3 +88,6 @@ MB FileBrowser offer a typed interface to application session. Through class Mag
 - **Delete**: user has full control over files.
 
 **MB.FileBrowser.MagicSession.Current.AllowedFileTypes** define file tipes accepted by upload process. Valid value is a string formatted as a comma separated list of extension without leading dot.
+
+## License ##
+MB File Browser is delivered under the free software/open source GNU General Public License (commonly known as the "GPL"). Form more informaztion about  IZWebFileManager license model refer to [project page](http://www.izwebfilemanager.com/).

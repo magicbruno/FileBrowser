@@ -67,6 +67,15 @@ namespace MB.FileBrowser {
         protected global::System.Web.UI.WebControls.HiddenField HF_Field;
         
         /// <summary>
+        /// Controllo HF_FileBrowserConfig.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlInputHidden HF_FileBrowserConfig;
+        
+        /// <summary>
         /// Controllo FileManager1.
         /// </summary>
         /// <remarks>

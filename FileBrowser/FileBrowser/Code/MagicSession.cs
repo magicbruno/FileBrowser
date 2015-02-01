@@ -75,8 +75,6 @@ namespace MB.FileBrowser
             }
         }
 
-        private Boolean _default;
-
         public Boolean Default
         {
             get { return FileBrowserAccessMode == AccessMode.Default; }
