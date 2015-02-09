@@ -1,4 +1,5 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" Inherits="MB.FileBrowser.FileBrowser" Codebehind="FileBrowser.aspx.cs" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" Inherits="MB.FileBrowser.FileBrowser"
+    CodeBehind="FileBrowser.aspx.cs" %>
 
 <%@ Register Assembly="IZ.WebFileManager" Namespace="IZ.WebFileManager" TagPrefix="iz" %>
 <!DOCTYPE html>
@@ -33,11 +34,13 @@
         <asp:HiddenField ID="HF_Opener" runat="server" />
         <asp:HiddenField ID="HF_CallBack" runat="server" />
         <asp:HiddenField ID="HF_Field" runat="server" />
-        <input id="HF_FileBrowserConfig" type="hidden" runat="server" data-imagefolder="images" data-flashfolder="flash" data-filesfolder="files" data-mediafolder="media"  />
+        <input id="HF_FileBrowserConfig" type="hidden" runat="server" data-imagefolder="image"
+            data-flashfolder="flash" data-filesfolder="files" data-mediafolder="media" />
         <div>
             <iz:FileManager ID="FileManager1" runat="server" Height="480" Width="570" ImagesFolder="~/FileBrowser/img/cmd"
-                MainDirectory="~/userfiles"  CustomThumbnailHandler="~/FileBrowser/IZWebFileManagerThumbnailHandler.ashx"
-                ShowHiddenFilesAndFolders="false" FileViewMode="Thumbnails" ClientOpenItemFunction="fileSelected" DefaultAccessMode="ReadOnly" >
+                MainDirectory="~/userfiles" CustomThumbnailHandler="~/FileBrowser/IZWebFileManagerThumbnailHandler.ashx"
+                ShowHiddenFilesAndFolders="false" FileViewMode="Thumbnails" ClientOpenItemFunction="fileSelected"
+                DefaultAccessMode="ReadOnly">
                 <CustomToolbarButtons>
                     <iz:CustomToolbarButton ImageUrl="img/cmd/Show.png" Text="Mostra file" PerformPostBack="false"
                         OnClientClick="showFile()" />
@@ -116,14 +119,21 @@
 
             switch (opener) {
                 case 'ckeditor':
+                    win = window.opener;
+                    if (win.CKEDITOR)
+                        win.CKEDITOR.tools.callFunction($('#HF_CKEditorFunctionNumber').val(), fileUrl);
+                    break;
                 case 'opener':
                     win = window.opener;
+                    win[fn](fileUrl);
                     break;
                 case 'parent':
+                    win[fn](fileUrl);
                     win = window.parent;
                     break;
                 case 'top':
                     win = window.top;
+                    win[fn](fileUrl);
                     break;
                 case 'tinymce4':
                     var params = window.parent.tinyMCE.activeEditor.windowManager.getParams();
@@ -135,20 +145,12 @@
                     }
                     break;
                 default:
+                    alert(fileUrl);
 
             }
-            if (win) {
-                if (win.CKEDITOR) {
-                    win.CKEDITOR.tools.callFunction($('#HF_CKEditorFunctionNumber').val(), fileUrl);
-                } else {
-                    win[fn](fileUrl);
-                }
-            }
-            else
-                alert(fileUrl);
 
             if (window.opener)
-                    window.close();
+                window.close();
         }
 
         /**

@@ -20,7 +20,7 @@ namespace MB.FileBrowser
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            ImageFolder = (!String.IsNullOrEmpty(HF_FileBrowserConfig.Attributes["data-imagesfolder"]) ?
+            ImageFolder = (!String.IsNullOrEmpty(HF_FileBrowserConfig.Attributes["data-imagefolder"]) ?
                     HF_FileBrowserConfig.Attributes["data-imagefolder"] : "images");
 
             FlashFolder = (!String.IsNullOrEmpty(HF_FileBrowserConfig.Attributes["data-filesfolder"]) ?
