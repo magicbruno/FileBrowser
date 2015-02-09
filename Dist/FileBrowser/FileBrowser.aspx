@@ -128,8 +128,8 @@
                     win[fn](fileUrl);
                     break;
                 case 'parent':
-                    win[fn](fileUrl);
                     win = window.parent;
+                    win[fn](fileUrl);
                     break;
                 case 'top':
                     win = window.top;
