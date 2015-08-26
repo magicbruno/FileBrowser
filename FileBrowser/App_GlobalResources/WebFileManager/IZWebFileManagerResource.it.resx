@@ -261,4 +261,7 @@
   <data name="View_file" xml:space="preserve">
     <value>Mostra file</value>
   </data>
+  <data name="No_Command_Help" xml:space="preserve">
+    <value>Fai "Doppio Click" per aprire una cartella. Fai "Doppio Click" per scaricare un file.</value>
+  </data>
 </root>

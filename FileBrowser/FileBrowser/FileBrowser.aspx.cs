@@ -19,6 +19,7 @@ namespace MB.FileBrowser
         public string FilesFolder { get; set; }
         public bool UseDefaultRoots { get; set; }
         public bool UseCustomRoots { get; set; }
+        public bool HideCommands { get; set; }
 
         // data- attributes for configuration of custom roots
         const string  USE_CUSTOMROOTS = "data-usecustomroots";
@@ -28,6 +29,7 @@ namespace MB.FileBrowser
         const string  ROOTS_LARGEIMAGES = "data-roots-largeimages";
         const string  ROOTS_FOLDERS =  "data-roots-folders"; 
         const string  ROOTS_IMAGEFOLDER =  "data-roots-imagefolder";
+        const string READONLY_HIDECOMMANDS = "data-readonly-hidecommands";
 
 
         protected void Page_Load(object sender, EventArgs e)
@@ -46,12 +48,15 @@ namespace MB.FileBrowser
 
             string useCustomStr = String.IsNullOrEmpty(HF_CustomRoots.Attributes[USE_CUSTOMROOTS]) ? "" :  HF_CustomRoots.Attributes[USE_CUSTOMROOTS];
             string useDefaultStr = String.IsNullOrEmpty(HF_CustomRoots.Attributes[USE_DEFAULTROOTS]) ? "" :  HF_CustomRoots.Attributes[USE_DEFAULTROOTS];
+            string hideCommandsStr = String.IsNullOrEmpty(HF_FileBrowserConfig.Attributes[READONLY_HIDECOMMANDS]) ? "" : HF_FileBrowserConfig.Attributes[READONLY_HIDECOMMANDS];
 
             UseCustomRoots = useCustomStr.ToLower() != "false";
             UseDefaultRoots = useDefaultStr.ToLower() == "true";
+            HideCommands = hideCommandsStr != "false";
 
-            if (Request.Url.Host.IndexOf("localhost") > -1)
-                FileManager1.DefaultAccessMode = AccessMode.Write;
+
+            //if (Request.Url.Host.IndexOf("localhost") > -1)
+            //    FileManager1.DefaultAccessMode = AccessMode.Write;
 
             CultureInfo culture;
             try
@@ -257,6 +262,11 @@ namespace MB.FileBrowser
 
                 if (UseCustomRoots)
                 {
+                    // Memorizza il parametro querystring "cs" che consente di visualizzare una sola customroot
+                    int selectedCustomRoot;
+                    if (!int.TryParse(Request["cs"], out selectedCustomRoot))
+                        selectedCustomRoot = -1;
+
                     // Folder containing custom roots icon images
                     string rootsImageFolder = String.IsNullOrEmpty(HF_CustomRoots.Attributes[ROOTS_IMAGEFOLDER]) ? "" : HF_CustomRoots.Attributes[ROOTS_IMAGEFOLDER];
 
@@ -320,16 +330,31 @@ namespace MB.FileBrowser
                     }
                     else
                     {
-                        for (int i = 0; i < rootsCount; i++)
+                        if (selectedCustomRoot >= 0 && selectedCustomRoot < rootsCount)
                         {
-                            mainRootInfo.CreateSubdirectory(rootsFolders[i]);
+                            mainRootInfo.CreateSubdirectory(rootsFolders[selectedCustomRoot]);
                             RootDirectory myCustomRoot = new RootDirectory();
                             myCustomRoot.ShowRootIndex = false;
-                            myCustomRoot.DirectoryPath = VirtualPathUtility.AppendTrailingSlash(mainRoot) + rootsFolders[i];
-                            myCustomRoot.LargeImageUrl = VirtualPathUtility.AppendTrailingSlash(rootsImageFolder) + rootsLargeImages[i];
-                            myCustomRoot.SmallImageUrl = VirtualPathUtility.AppendTrailingSlash(rootsImageFolder) + rootsLargeImages[i];
-                            myCustomRoot.Text = rootsNames[i];
+                            myCustomRoot.DirectoryPath = VirtualPathUtility.AppendTrailingSlash(mainRoot) + rootsFolders[selectedCustomRoot];
+                            myCustomRoot.LargeImageUrl = VirtualPathUtility.AppendTrailingSlash(rootsImageFolder) + rootsLargeImages[selectedCustomRoot];
+                            myCustomRoot.SmallImageUrl = VirtualPathUtility.AppendTrailingSlash(rootsImageFolder) + rootsLargeImages[selectedCustomRoot];
+                            myCustomRoot.Text = rootsNames[selectedCustomRoot];
                             FileManager1.RootDirectories.Add(myCustomRoot);
+                        }
+                        else
+                        {
+                            for (int i = 0; i < rootsCount; i++)
+                            {
+                                mainRootInfo.CreateSubdirectory(rootsFolders[i]);
+                                RootDirectory myCustomRoot = new RootDirectory();
+                                myCustomRoot.ShowRootIndex = false;
+                                myCustomRoot.DirectoryPath = VirtualPathUtility.AppendTrailingSlash(mainRoot) + rootsFolders[i];
+                                myCustomRoot.LargeImageUrl = VirtualPathUtility.AppendTrailingSlash(rootsImageFolder) + rootsLargeImages[i];
+                                myCustomRoot.SmallImageUrl = VirtualPathUtility.AppendTrailingSlash(rootsImageFolder) + rootsLargeImages[i];
+                                myCustomRoot.Text = rootsNames[i];
+                                FileManager1.RootDirectories.Add(myCustomRoot);
+                            }
+
                         }
                     } 
 	            }            
@@ -364,9 +389,17 @@ namespace MB.FileBrowser
                 case AccessMode.ReadOnly:
                 case AccessMode.Default:
                     FileManager1.Visible = true;
-                    Panel_upload.Visible = true;
+                    Panel_upload.Visible = false;
                     Panel_deny.Visible = false;
                     FileManager1.ReadOnly = true;
+                    if (HideCommands)
+                    {
+                        FileManager1.ShowToolBar = false;
+                        FileManager1.EnableContextMenu = false;
+                        Panel_upload.Visible = true;
+                        Upload_button.Visible = false;
+                        DND_message.InnerText = FileManager1.Controller.GetResourceString("No_Command_Help", "DoubleClick to open a folder. DoubleClick to download a file.");
+                    }
                     break;
                 case AccessMode.Write:
                     FileManager1.Visible = true;

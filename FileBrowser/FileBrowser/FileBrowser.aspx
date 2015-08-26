@@ -34,8 +34,13 @@
         <asp:HiddenField ID="HF_Opener" runat="server" />
         <asp:HiddenField ID="HF_CallBack" runat="server" />
         <asp:HiddenField ID="HF_Field" runat="server" />
-        <input id="HF_FileBrowserConfig" type="hidden" runat="server" data-imagefolder="image"
-            data-flashfolder="flash" data-filesfolder="files" data-mediafolder="media" />
+        <input id="HF_FileBrowserConfig" type="hidden" runat="server" 
+            data-imagefolder="image"
+            data-flashfolder="flash" 
+            data-filesfolder="files" 
+            data-mediafolder="media" 
+            data-readonly-hidecommands="false"
+         />
         <input id="HF_CustomRoots" type="hidden" runat="server" 
             data-usecustomroots="false"
             data-usedefaultroots="true" 
@@ -48,8 +53,8 @@
         <div>
             <iz:FileManager ID="FileManager1" runat="server" Height="480" Width="570" ImagesFolder="~/FileBrowser/img/cmd"
                 MainDirectory="~/userfiles" CustomThumbnailHandler="~/FileBrowser/IZWebFileManagerThumbnailHandler.ashx"
-                ShowHiddenFilesAndFolders="false" FileViewMode="Thumbnails" ClientOpenItemFunction="fileSelected"
-                DefaultAccessMode="ReadOnly">
+                ShowHiddenFilesAndFolders="false" FileViewMode="Thumbnails" DownloadOnDoubleClick="true" 
+                DefaultAccessMode="ReadOnly" > 
                 <CustomToolbarButtons>
                     <iz:CustomToolbarButton ImageUrl="img/cmd/Show.png" Text="Mostra file" PerformPostBack="false"
                         OnClientClick="showFile()" />
@@ -244,9 +249,12 @@
                 var $this = $(this);
                 var w = $this.width();
                 var h = $this.height();
+                var $toolbar = $('#FileManager1_ToolBar');
+                var $paneUpload = $('#Panel_upload');
+                var barsHeight = ($toolbar.length ? $toolbar.height() + 5 : 5) + ($paneUpload.length ? $paneUpload.height() + 5 : 5);
                 $filemanager.width(w - 15);
-                $fileview.width(w - $foldertree.width() - 15).height(h - 60);
-                $foldertree.height(h - 60);
+                $fileview.width(w - $foldertree.width() - 15).height(h - barsHeight);
+                $foldertree.height(h - barsHeight);
             })
         })
 

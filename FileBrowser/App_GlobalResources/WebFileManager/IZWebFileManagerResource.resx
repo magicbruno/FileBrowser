@@ -264,4 +264,7 @@
   <data name="View_file" xml:space="preserve">
     <value>File view</value>
   </data>
+  <data name="No_Command_Help" xml:space="preserve">
+    <value>DoubleClick to open a folder. DoubleClick to download a file.</value>
+  </data>
 </root>
