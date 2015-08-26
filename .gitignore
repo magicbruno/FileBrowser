@@ -28,5 +28,4 @@ _ReSharper*/
 *.vssscc
 $tf*/
 packages\*/
-NuGet/*.*
 *.publishproj
