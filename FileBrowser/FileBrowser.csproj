@@ -156,6 +156,7 @@
     <Content Include="FileBrowser\js\FileManager.js" />
     <Content Include="FileBrowser\js\FileManager.js.bundle" />
     <Content Include="FileBrowser\js\FileManager.min.js" />
+    <Content Include="userfiles\image\dummy.jpg" />
     <None Include="Properties\PublishProfiles\Local.pubxml" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
@@ -193,7 +194,7 @@
     <Content Include="Scripts\plugins\spin\jquery.spin.js" />
     <Content Include="Scripts\plugins\spin\spin.js" />
     <Content Include="Scripts\_references.js" />
-    <Content Include="Web.config" />
+    <None Include="Web.config" />
     <None Include="Scripts\jquery-1.11.1.intellisense.js" />
   </ItemGroup>
   <ItemGroup>
@@ -296,10 +297,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="userfiles\files\" />
-    <Folder Include="userfiles\flash\" />
-    <Folder Include="userfiles\images\" />
-    <Folder Include="userfiles\media\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="FileBrowser\IZWebFileManagerThumbnailHandler.ashx" />

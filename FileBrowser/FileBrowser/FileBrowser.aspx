@@ -36,6 +36,15 @@
         <asp:HiddenField ID="HF_Field" runat="server" />
         <input id="HF_FileBrowserConfig" type="hidden" runat="server" data-imagefolder="image"
             data-flashfolder="flash" data-filesfolder="files" data-mediafolder="media" />
+        <input id="HF_CustomRoots" type="hidden" runat="server" 
+            data-usecustomroots="false"
+            data-usedefaultroots="true" 
+            data-roots-names="Pippo,Pluto,Paperino" 
+            data-roots-smallimages="file-video.png,file-word.png,file-zip-alt.png" 
+            data-roots-largeimages="file-video.png,file-word.png,file-zip-alt.png"
+            data-roots-folders="" 
+            data-roots-imagefolder="/FileBrowser/img/32"
+         />
         <div>
             <iz:FileManager ID="FileManager1" runat="server" Height="480" Width="570" ImagesFolder="~/FileBrowser/img/cmd"
                 MainDirectory="~/userfiles" CustomThumbnailHandler="~/FileBrowser/IZWebFileManagerThumbnailHandler.ashx"

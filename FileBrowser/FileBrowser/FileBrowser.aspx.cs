@@ -17,14 +17,26 @@ namespace MB.FileBrowser
         public string FlashFolder { get; set; }
         public string MediaFolder { get; set; }
         public string FilesFolder { get; set; }
+        public bool UseDefaultRoots { get; set; }
+        public bool UseCustomRoots { get; set; }
+
+        // data- attributes for configuration of custom roots
+        const string  USE_CUSTOMROOTS = "data-usecustomroots";
+        const string  USE_DEFAULTROOTS = "data-usedefaultroots" ;
+        const string  ROOTS_NAMES =  "data-roots-names";
+        const string  ROOTS_SMALLIMAGES =  "data-roots-smallimages";
+        const string  ROOTS_LARGEIMAGES = "data-roots-largeimages";
+        const string  ROOTS_FOLDERS =  "data-roots-folders"; 
+        const string  ROOTS_IMAGEFOLDER =  "data-roots-imagefolder";
+
 
         protected void Page_Load(object sender, EventArgs e)
         {
             ImageFolder = (!String.IsNullOrEmpty(HF_FileBrowserConfig.Attributes["data-imagefolder"]) ?
                     HF_FileBrowserConfig.Attributes["data-imagefolder"] : "images");
 
-            FlashFolder = (!String.IsNullOrEmpty(HF_FileBrowserConfig.Attributes["data-filesfolder"]) ?
-                    HF_FileBrowserConfig.Attributes["data-filesfolder"] : "flash");
+            FlashFolder = (!String.IsNullOrEmpty(HF_FileBrowserConfig.Attributes["data-flashfolder"]) ?
+                    HF_FileBrowserConfig.Attributes["data-flashfolder"] : "flash");
 
             MediaFolder = (!String.IsNullOrEmpty(HF_FileBrowserConfig.Attributes["data-mediafolder"]) ?
                     HF_FileBrowserConfig.Attributes["data-mediafolder"] : "media");
@@ -32,6 +44,11 @@ namespace MB.FileBrowser
             FilesFolder = (!String.IsNullOrEmpty(HF_FileBrowserConfig.Attributes["data-filesfolder"]) ?
                     HF_FileBrowserConfig.Attributes["data-filesfolder"] : "files");
 
+            string useCustomStr = String.IsNullOrEmpty(HF_CustomRoots.Attributes[USE_CUSTOMROOTS]) ? "" :  HF_CustomRoots.Attributes[USE_CUSTOMROOTS];
+            string useDefaultStr = String.IsNullOrEmpty(HF_CustomRoots.Attributes[USE_DEFAULTROOTS]) ? "" :  HF_CustomRoots.Attributes[USE_DEFAULTROOTS];
+
+            UseCustomRoots = useCustomStr.ToLower() != "false";
+            UseDefaultRoots = useDefaultStr.ToLower() == "true";
 
             if (Request.Url.Host.IndexOf("localhost") > -1)
                 FileManager1.DefaultAccessMode = AccessMode.Write;
@@ -134,11 +151,6 @@ namespace MB.FileBrowser
 
                 DirectoryInfo mainRootInfo = new DirectoryInfo(Server.MapPath(ResolveClientUrl(mainRoot)));
 
-                mainRootInfo.CreateSubdirectory(ImageFolder);
-                mainRootInfo.CreateSubdirectory(FilesFolder);
-                mainRootInfo.CreateSubdirectory(FlashFolder);
-                mainRootInfo.CreateSubdirectory(MediaFolder);
-
                 if (!String.IsNullOrEmpty(Request["type"]))
                 {
                     type = Request["type"];
@@ -148,88 +160,179 @@ namespace MB.FileBrowser
                 // Display text of root folders are localized using WebFileBrowser resources files
                 // in "/App_GlobalResources/WebFileManager" and GetResoueceString method
                 // of FileManager.Controller class
-                switch (type)
-                {
-                    case "images":
-                    case "image":
-                        FileManager1.RootDirectories.Clear();
-                        images = new RootDirectory();
-                        images.ShowRootIndex = false;
-                        images.DirectoryPath = VirtualPathUtility.AppendTrailingSlash(mainRoot) + ImageFolder;
-                        images.Text = FileManager1.Controller.GetResourceString("Root_Image", "Images");
-                        images.LargeImageUrl = "~/FileBrowser/img/32/camera.png";
-                        images.SmallImageUrl = "~/FileBrowser/img/16/camera.png";
-                        FileManager1.RootDirectories.Add(images);
-                        break;
-                    case "flash":
-                        FileManager1.RootDirectories.Clear();
-                        flash = new RootDirectory();
-                        flash.ShowRootIndex = false;
-                        flash.DirectoryPath = VirtualPathUtility.AppendTrailingSlash(mainRoot) + FlashFolder;
-                        flash.LargeImageUrl = "~/FileBrowser/img/32/folder-flash.png";
-                        flash.SmallImageUrl = "~/FileBrowser/img/16/folder-flash.png";
-                        flash.Text = FileManager1.Controller.GetResourceString("Root_Flash", "Flash Movies");
-                        FileManager1.RootDirectories.Add(flash);
-                        break;
-                    case "files":
-                        FileManager1.RootDirectories.Clear();
-                        files = new RootDirectory();
-                        files.ShowRootIndex = false;
-                        files.DirectoryPath = VirtualPathUtility.AppendTrailingSlash(mainRoot) + FilesFolder;
-                        files.LargeImageUrl = "~/FileBrowser/img/32/folder-document-alt.png";
-                        files.SmallImageUrl = "~/FileBrowser/img/16/folder-document-alt.png";
-                        files.Text = FileManager1.Controller.GetResourceString("Root_File", "Files");
-                        FileManager1.RootDirectories.Add(files);
-                        break;
-                    case "media":
-                        FileManager1.RootDirectories.Clear();
-                        media = new RootDirectory();
-                        media.ShowRootIndex = false;
-                        media.DirectoryPath = VirtualPathUtility.AppendTrailingSlash(mainRoot) + MediaFolder;
-                        media.LargeImageUrl = "~/FileBrowser/img/32/folder-video-alt.png";
-                        media.SmallImageUrl = "~/FileBrowser/img/16/folder-video-alt.png";
-                        media.Text = FileManager1.Controller.GetResourceString("Root_Media", "Media");
-                        FileManager1.RootDirectories.Add(media);
-                        break;
-                    default:
-                        FileManager1.RootDirectories.Clear();
-                        files = new RootDirectory();
-                        files.ShowRootIndex = false;
-                        files.DirectoryPath = VirtualPathUtility.AppendTrailingSlash(mainRoot) + FilesFolder;
-                        files.LargeImageUrl = "~/FileBrowser/img/32/folder-document-alt.png";
-                        files.SmallImageUrl = "~/FileBrowser/img/16/folder-document-alt.png";
-                        // Display text of root folders are localized using WebFileBrowser resources files
-                        // in "/App_GlobalResources/WebFileManager" and GetResoueceString method
-                        // of FileManager.Controller class
-                        files.Text = FileManager1.Controller.GetResourceString("Root_File", "Files");
-                        FileManager1.RootDirectories.Add(files);
 
-                        flash = new RootDirectory();
-                        flash.ShowRootIndex = false;
-                        flash.DirectoryPath = VirtualPathUtility.AppendTrailingSlash(mainRoot) + FlashFolder;
-                        flash.LargeImageUrl = "~/FileBrowser/img/32/folder-flash.png";
-                        flash.SmallImageUrl = "~/FileBrowser/img/16/folder-flash.png";
-                        flash.Text = FileManager1.Controller.GetResourceString("Root_Flash", "Flash Movies");
-                        FileManager1.RootDirectories.Add(flash);
+                FileManager1.RootDirectories.Clear();
+                if (UseDefaultRoots)
+	                {
 
-                        images = new RootDirectory();
-                        images.ShowRootIndex = false;
-                        images.DirectoryPath = VirtualPathUtility.AppendTrailingSlash(mainRoot) + ImageFolder;
-                        images.Text = FileManager1.Controller.GetResourceString("Root_Image", "Images");
-                        images.LargeImageUrl = "~/FileBrowser/img/32/camera.png";
-                        images.SmallImageUrl = "~/FileBrowser/img/16/camera.png";
-                        FileManager1.RootDirectories.Add(images);
+                    mainRootInfo.CreateSubdirectory(ImageFolder);
+                    mainRootInfo.CreateSubdirectory(FilesFolder);
+                    mainRootInfo.CreateSubdirectory(FlashFolder);
+                    mainRootInfo.CreateSubdirectory(MediaFolder);
 
-                        media = new RootDirectory();
-                        media.ShowRootIndex = false;
-                        media.DirectoryPath = VirtualPathUtility.AppendTrailingSlash(mainRoot) + MediaFolder;
-                        media.LargeImageUrl = "~/FileBrowser/img/32/folder-video-alt.png";
-                        media.SmallImageUrl = "~/FileBrowser/img/16/folder-video-alt.png";
-                        media.Text = FileManager1.Controller.GetResourceString("Root_Media", "Media");
-                        FileManager1.RootDirectories.Add(media);
+		            switch (type)
+                        {
+                        case "images":
+                        case "image":
+                            FileManager1.RootDirectories.Clear();
+                            images = new RootDirectory();
+                            images.ShowRootIndex = false;
+                            images.DirectoryPath = VirtualPathUtility.AppendTrailingSlash(mainRoot) + ImageFolder;
+                            images.Text = FileManager1.Controller.GetResourceString("Root_Image", "Images");
+                            images.LargeImageUrl = "~/FileBrowser/img/32/camera.png";
+                            images.SmallImageUrl = "~/FileBrowser/img/16/camera.png";
+                            FileManager1.RootDirectories.Add(images);
+                            break;
+                        case "flash":
+                            FileManager1.RootDirectories.Clear();
+                            flash = new RootDirectory();
+                            flash.ShowRootIndex = false;
+                            flash.DirectoryPath = VirtualPathUtility.AppendTrailingSlash(mainRoot) + FlashFolder;
+                            flash.LargeImageUrl = "~/FileBrowser/img/32/folder-flash.png";
+                            flash.SmallImageUrl = "~/FileBrowser/img/16/folder-flash.png";
+                            flash.Text = FileManager1.Controller.GetResourceString("Root_Flash", "Flash Movies");
+                            FileManager1.RootDirectories.Add(flash);
+                            break;
+                        case "files":
+                            FileManager1.RootDirectories.Clear();
+                            files = new RootDirectory();
+                            files.ShowRootIndex = false;
+                            files.DirectoryPath = VirtualPathUtility.AppendTrailingSlash(mainRoot) + FilesFolder;
+                            files.LargeImageUrl = "~/FileBrowser/img/32/folder-document-alt.png";
+                            files.SmallImageUrl = "~/FileBrowser/img/16/folder-document-alt.png";
+                            files.Text = FileManager1.Controller.GetResourceString("Root_File", "Files");
+                            FileManager1.RootDirectories.Add(files);
+                            break;
+                        case "media":
+                            FileManager1.RootDirectories.Clear();
+                            media = new RootDirectory();
+                            media.ShowRootIndex = false;
+                            media.DirectoryPath = VirtualPathUtility.AppendTrailingSlash(mainRoot) + MediaFolder;
+                            media.LargeImageUrl = "~/FileBrowser/img/32/folder-video-alt.png";
+                            media.SmallImageUrl = "~/FileBrowser/img/16/folder-video-alt.png";
+                            media.Text = FileManager1.Controller.GetResourceString("Root_Media", "Media");
+                            FileManager1.RootDirectories.Add(media);
+                            break;
+                        default:
+                            FileManager1.RootDirectories.Clear();
+                            files = new RootDirectory();
+                            files.ShowRootIndex = false;
+                            files.DirectoryPath = VirtualPathUtility.AppendTrailingSlash(mainRoot) + FilesFolder;
+                            files.LargeImageUrl = "~/FileBrowser/img/32/folder-document-alt.png";
+                            files.SmallImageUrl = "~/FileBrowser/img/16/folder-document-alt.png";
+                            // Display text of root folders are localized using WebFileBrowser resources files
+                            // in "/App_GlobalResources/WebFileManager" and GetResoueceString method
+                            // of FileManager.Controller class
+                            files.Text = FileManager1.Controller.GetResourceString("Root_File", "Files");
+                            FileManager1.RootDirectories.Add(files);
 
-                        break;
+                            flash = new RootDirectory();
+                            flash.ShowRootIndex = false;
+                            flash.DirectoryPath = VirtualPathUtility.AppendTrailingSlash(mainRoot) + FlashFolder;
+                            flash.LargeImageUrl = "~/FileBrowser/img/32/folder-flash.png";
+                            flash.SmallImageUrl = "~/FileBrowser/img/16/folder-flash.png";
+                            flash.Text = FileManager1.Controller.GetResourceString("Root_Flash", "Flash Movies");
+                            FileManager1.RootDirectories.Add(flash);
+
+                            images = new RootDirectory();
+                            images.ShowRootIndex = false;
+                            images.DirectoryPath = VirtualPathUtility.AppendTrailingSlash(mainRoot) + ImageFolder;
+                            images.Text = FileManager1.Controller.GetResourceString("Root_Image", "Images");
+                            images.LargeImageUrl = "~/FileBrowser/img/32/camera.png";
+                            images.SmallImageUrl = "~/FileBrowser/img/16/camera.png";
+                            FileManager1.RootDirectories.Add(images);
+
+                            media = new RootDirectory();
+                            media.ShowRootIndex = false;
+                            media.DirectoryPath = VirtualPathUtility.AppendTrailingSlash(mainRoot) + MediaFolder;
+                            media.LargeImageUrl = "~/FileBrowser/img/32/folder-video-alt.png";
+                            media.SmallImageUrl = "~/FileBrowser/img/16/folder-video-alt.png";
+                            media.Text = FileManager1.Controller.GetResourceString("Root_Media", "Media");
+                            FileManager1.RootDirectories.Add(media);
+
+                            break;
+                    }
                 }
+
+
+                if (UseCustomRoots)
+                {
+                    // Folder containing custom roots icon images
+                    string rootsImageFolder = String.IsNullOrEmpty(HF_CustomRoots.Attributes[ROOTS_IMAGEFOLDER]) ? "" : HF_CustomRoots.Attributes[ROOTS_IMAGEFOLDER];
+
+                    //Arrays: roots names, roots folders, small icons, large icons
+                    string[] rootsNames, rootsFolders, rootsSmallImages, rootsLargeImages;
+
+                    // Convert data-roots-names value in array
+                    string temp = String.IsNullOrEmpty(HF_CustomRoots.Attributes[ROOTS_NAMES]) ? "" : HF_CustomRoots.Attributes[ROOTS_NAMES];
+                    if (temp == "")
+                    {
+                        return;
+                    }
+                    rootsNames = temp.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+
+                    // Count of custom roots
+                    int rootsCount = rootsNames.Length;
+
+                    // If data-roots-folder is empty, will use root names
+                    if (String.IsNullOrEmpty(HF_CustomRoots.Attributes[ROOTS_FOLDERS]))
+                    {
+                        rootsFolders = temp.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+                    }
+                    else
+                    {
+                        rootsFolders = HF_CustomRoots.Attributes[ROOTS_FOLDERS].Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+                    }
+
+
+                    if (rootsCount > rootsFolders.Length)
+                        rootsCount = rootsFolders.Length;
+
+                    if (!String.IsNullOrEmpty(HF_CustomRoots.Attributes[ROOTS_SMALLIMAGES]))
+                    {
+                        rootsSmallImages = HF_CustomRoots.Attributes[ROOTS_SMALLIMAGES].Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+                        if (rootsCount > rootsSmallImages.Length)
+                            rootsCount = rootsSmallImages.Length;
+                    }
+                    else
+                    {
+                        rootsSmallImages = new string [] {};
+                        rootsCount = 0;
+
+                    }
+
+                    if (!String.IsNullOrEmpty(HF_CustomRoots.Attributes[ROOTS_LARGEIMAGES]))
+                    {
+                        rootsLargeImages = HF_CustomRoots.Attributes[ROOTS_LARGEIMAGES].Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+                        if (rootsCount > rootsLargeImages.Length)
+                            rootsCount = rootsLargeImages.Length;
+                    }
+                    else
+                    {
+                        rootsLargeImages = new string[] { };
+                        rootsCount = 0;
+
+                    }
+
+                    if (rootsCount == 0)
+                    {
+                        throw new Exception("If UseCustomRoots option is setted you must provide Custom Roots full info (Names, Folders, small an large images).");
+                    }
+                    else
+                    {
+                        for (int i = 0; i < rootsCount; i++)
+                        {
+                            mainRootInfo.CreateSubdirectory(rootsFolders[i]);
+                            RootDirectory myCustomRoot = new RootDirectory();
+                            myCustomRoot.ShowRootIndex = false;
+                            myCustomRoot.DirectoryPath = VirtualPathUtility.AppendTrailingSlash(mainRoot) + rootsFolders[i];
+                            myCustomRoot.LargeImageUrl = VirtualPathUtility.AppendTrailingSlash(rootsImageFolder) + rootsLargeImages[i];
+                            myCustomRoot.SmallImageUrl = VirtualPathUtility.AppendTrailingSlash(rootsImageFolder) + rootsLargeImages[i];
+                            myCustomRoot.Text = rootsNames[i];
+                            FileManager1.RootDirectories.Add(myCustomRoot);
+                        }
+                    } 
+	            }            
             }
 
             AccessMode fbAccessMode;
