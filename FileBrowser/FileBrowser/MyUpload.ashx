@@ -57,8 +57,8 @@ namespace MB.FileBrowser
                         while (File.Exists((destPath)))
                         {
                             string tempFname = Path.GetFileNameWithoutExtension(filename) + "(" + i.ToString() + ")" + Path.GetExtension(filename);
+							destPath = context.Server.MapPath(tempFname);
                             i++;
-							destPath = context.Server.MapPath(filename);
                         }
                         context.Request.Files[0].SaveAs(destPath);
                     }
