@@ -53,7 +53,7 @@
         <div>
             <iz:FileManager ID="FileManager1" runat="server" Height="480" Width="570" ImagesFolder="~/FileBrowser/img/cmd"
                 MainDirectory="~/userfiles" CustomThumbnailHandler="~/FileBrowser/IZWebFileManagerThumbnailHandler.ashx"
-                ShowHiddenFilesAndFolders="false" FileViewMode="Thumbnails" DownloadOnDoubleClick="true" 
+                ShowHiddenFilesAndFolders="false" FileViewMode="Thumbnails" ClientOpenItemFunction="fileSelected"
                 DefaultAccessMode="ReadOnly" > 
                 <CustomToolbarButtons>
                     <iz:CustomToolbarButton ImageUrl="img/cmd/Show.png" Text="Mostra file" PerformPostBack="false"
