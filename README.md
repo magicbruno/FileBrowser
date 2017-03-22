@@ -1,6 +1,6 @@
 # MB FileBrowser #
 
-MB FileBrowser for ASP.NET 3.5 offer an open source solution to provide server side file browsing to popular html on-line editors (like CKEditor and Tiny MCE) or to your own forms.
+MB FileBrowser offer an open source solution to provide server side file browsing to popular html on-line editors (like CKEditor and Tiny MCE) or to your own forms.
 
 The project use a [modified version of IZ File Manager](https://github.com/magicbruno/IZWebFileManager) a server side asp.net web control developed by [manishma](https://github.com/manishma). Refer to [IZWebFileManager](https://github.com/magicbruno/IZWebFileManager) repository for full source code of the control.
 
